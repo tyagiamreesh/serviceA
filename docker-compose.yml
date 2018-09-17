@@ -1,10 +1,10 @@
-version: '2.1'
-
-services:
-  serviceA:
-    image: service-a
-    build: .
-    environment:
+--- 
+services: 
+  serviceA: 
+    build: "."
+    environment: 
       NODE_ENV: production
-    ports:
-      - 5000:5000
+    image: service-a
+    ports: 
+      - "5000:5000"
+version: "2.1"
