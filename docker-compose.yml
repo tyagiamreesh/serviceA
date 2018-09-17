@@ -4,7 +4,7 @@ services:
     build: "."
     environment: 
       NODE_ENV: production
-    image: service-a
+    image: amreeshtyagi/express-basic-demo:latest
     ports: 
       - "5000:5000"
 version: "3"
