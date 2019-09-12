@@ -1,0 +1,53 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-a
+  namespace: service-a
+spec:
+  selector:
+    app: service-a
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a
+  namespace: service-a
+  labels:
+    app: service-a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service-a
+  template:
+    metadata:
+      labels:
+        app: service-a
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+      - name: service-a
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+        env:
+         - name: MYSQL_DB_SERVER
+           value: mysql-mysql
+         - name: MYSQL_DB_NAME
+           value: identity_management
+         - name: MYSQL_DB_USER
+           valueFrom:
+             secretKeyRef:
+               name: mysql-mysql
+               key: mysql-db-user
+         - name: MYSQL_DB_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: mysql-mysql
+               key: mysql-password
+        ports:
+        - containerPort: 3000
