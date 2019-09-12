@@ -1,0 +1,29 @@
+stages:
+- name: Build
+  steps:
+  - runScriptConfig:
+      image: node:10.13.0
+      shellScript: npm install && npm run lint && npm run test
+    env:
+      NODE_ENV: test
+- name: Build and publish local Image
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: mosaic/serrviceA:${CICD_EXECUTION_SEQUENCE}
+      pushRemote: true
+      registry: docker.monotype.com
+    env:
+     PLUGIN_DEBUG: "true"
+     PLUGIN_INSECURE: "true"
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
+    env:
+      MYSQL_DB_NAME: identity_management
+      MYSQL_DB_SERVER: mysql-mysql
+      NODE_ENV: test
+      PORT: "5000"
+timeout: 60
