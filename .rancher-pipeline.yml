@@ -11,7 +11,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: mosaic/serrviceA:${CICD_EXECUTION_SEQUENCE}
+      tag: mosaic/serrvice-a:${CICD_EXECUTION_SEQUENCE}
       pushRemote: true
       registry: docker.monotype.com
     env:
